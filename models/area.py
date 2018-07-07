@@ -1,6 +1,6 @@
-import pgsql
+from pgsql import Pgsql
 
-class Area(pgsql.Pgsql):
+class Area(Pgsql):
     table_name = 'areas'
     dbname = 'sample'
     host = '192.168.11.56'

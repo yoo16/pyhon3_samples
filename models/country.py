@@ -1,6 +1,6 @@
-import pgsql
+from pgsql import Pgsql
 
-class Country(pgsql.Pgsql):
+class Country(Pgsql):
     table_name = 'countries'
     dbname = 'sample'
     host = '192.168.11.56'
