@@ -28,6 +28,12 @@ date = date_manager.DateManager()
 date.setNumberForInterval(from_number, to_number)
 
 file_name = "gps_%s_%s.png" % (spot_code, sensor_id)
+print("spot code:", spot.value['code'])
+print("spot name:", spot.value['name'])
+print("sensor_id:", sensor_id)
+print("from_datetime:", date.from_datetime)
+print("to_datetime:", date.to_datetime)
+print("file_name:", file_name)
 
 sensor_measure = m_sm.SensorMeasure()
 sensor_measure.setDate(date)
@@ -36,13 +42,6 @@ sensor_measure.setSensor(sensor)
 sensor_measure.fetchValues()
 sensor_measure.graphValues()
 sensor_measure.draw(file_name)
-
-print("file_name:", file_name)
-print("spot code:", spot.value['code'])
-print("spot name:", spot.value['name'])
-print("sensor_id:", sensor_id)
-print("from_datetime:", date.from_datetime)
-print("to_datetime:", date.to_datetime)
 
 # with TempImage(img_name) as img:
 #         img.create_png()

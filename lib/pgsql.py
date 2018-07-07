@@ -6,10 +6,10 @@ class Pgsql:
     conditions = []
     orders = []
     table_name = ''
+    columns = {}
+    value = {}
     id_column = 'id'
     sql = ''
-    where = ''
-    order = ''
     host = 'localhost'
     dbname = ''
     port = '5432'
@@ -19,8 +19,6 @@ class Pgsql:
         self.initWhere()
         self.initOrder()
         self.sql = ''
-        self.where = ''
-        self.order = ''
         self.table_name = ''
         return
 
@@ -41,16 +39,18 @@ class Pgsql:
 
     @classmethod
     def connect(self):
-        connection_info = "host=%s port=%s dbname=%s user=%s" % (self.host, self.port, self.dbname, self.user)
-        connection = pg.connect(connection_info)
-        self.cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        self.connection_info = "host=%s port=%s dbname=%s user=%s" % (self.host, self.port, self.dbname, self.user)
+        self.connection = pg.connect(self.connection_info)
+        self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
         return
 
     @classmethod
     def query(self):
-        print(self.sql)
-        self.connect()
-        self.cursor.execute(self.sql)
+        if self.sql:
+           print(self.sql)
+           self.connect()
+           self.cursor.execute(self.sql)
+           self.connection.commit()
         return
 
     @classmethod
@@ -87,6 +87,26 @@ class Pgsql:
         return self
     
     @classmethod
+    def insert(self, value):
+        if value: self.takeValues(value)
+        self.sqlInsert()
+        self.query()
+        return self
+    
+    @classmethod
+    def deletes(self):
+        self.sqlDelete()
+        self.query()
+        return self
+
+    @classmethod
+    def takeValues(self, value):
+        for column in self.columns:
+            if column != 'id':
+                self.value[column] = value[column]
+        return self
+    
+    @classmethod
     def sqlSelect(self):
         self.sql = "SELECT * FROM %s" % (self.table_name)
         self.sqlWhere()
@@ -107,7 +127,42 @@ class Pgsql:
            order = ','.join(self.orders)
            self.sql += " ORDER BY %s" % (order)
         return
+    
+    @classmethod
+    def sqlInsert(self):
+        if self.value is None: return ''
+        sql_values = []
+        sql_columns = []
+        for column_name in self.columns:
+            if column_name != 'id':
+               column = self.columns[column_name]
+               value = self.value[column_name]
+               value = self.sqlValue(value, column)
 
+               sql_values.append(value)
+               sql_columns.append(column_name)
+
+        value = ', '.join(sql_values)
+        column_name = ', '.join(sql_columns)
+
+        self.sql = "INSERT INTO %s (%s) VALUES (%s)" % (self.table_name, column_name, value)
+        return self.sql
+
+    @classmethod
+    def sqlDelete(self):
+        self.sql = "DELETE FROM %s" % (self.table_name)
+        self.sqlWhere()
+        return self.sql
+
+    @classmethod
+    def sqlValue(self, value, column):
+        #type = column['type']
+        if value is None:
+            value = 'NULL'
+        else:
+            value = "'%s'" % (value) 
+        return value
+        
     @classmethod
     def initWhere(self):
         self.conditions = []
