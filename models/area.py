@@ -1,9 +1,7 @@
-from pgsql import Pgsql
+from lib.pgsql import Pgsql
 
 class Area(Pgsql):
     table_name = 'areas'
-    dbname = 'sample'
-    host = '192.168.11.56'
     columns = {
         'id': {
             'type': 'int4',
@@ -21,3 +19,11 @@ class Area(Pgsql):
         },
     }
     primary_key = 'areas_pkey'
+    unique = {
+        'areas_name_key': ['name'],
+        'areas_code_key': ['code'],
+    }
+
+    # def __init__(self):
+    #     super().__init__()
+    #     return

@@ -1,5 +1,4 @@
-import autoloader
-from area import Area
+from models.area import Area
 
 area = Area()
 area.all()

@@ -1,6 +1,5 @@
-import autoloader
-from area import Area
-from country import Country
+from models.area import Area
+from models.country import Country
 
 country = Country()
 country.deletes()

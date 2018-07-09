@@ -1,9 +1,7 @@
-from pgsql import Pgsql
+from lib.pgsql import Pgsql
 
 class Country(Pgsql):
     table_name = 'countries'
-    dbname = 'sample'
-    host = '192.168.11.56'
 
     columns = {
         'id': {
@@ -25,11 +23,22 @@ class Country(Pgsql):
         },
     }
     primary_key = 'countries_pkey'
-    foreign = {
+    foreigns = {
             'countries_area_id_fkey': {
                                   'column':  'area_id',
                                   'class_name': 'Area',
                                   'foreign_table_name': 'areas',
                                   'foreign_column': 'id',
+                                  'cascade_update_type': 'NO ACTION',
+                                  'cascade_delete_type': 'CASCADE',
                                   },
     }
+    unique = {
+        'countries_name_key': {
+                    'name',
+                    },
+    }
+
+    # def __init__(self):
+    #     super().__init__()
+    #     return

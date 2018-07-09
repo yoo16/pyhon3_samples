@@ -1,7 +1,5 @@
+from models.area import Area
 from models.country import Country
 
 country = Country()
-country.all()
-
-print(country.sql)
-print(country.values)
+country.delete(8)
