@@ -1,6 +1,6 @@
 import os
 import configparser
-import psycopg2 as pg
+import psycopg2
 import psycopg2.extras
 import datetime as dt
 
@@ -71,19 +71,19 @@ class Pgsql:
         return self
 
     def setTableName(self, table_name):
-        print('table name:', table_name)
         self.table_name = table_name
         return self
 
     def connect(self):
         connection_info = "host=%s port=%s dbname=%s user=%s" % (
             self.host, self.port, self.dbname, self.user)
-        self.connection = pg.connect(connection_info)
+        self.connection = psycopg2.connect(connection_info)
+        print(self.host)
+        print(self.dbname)
         return self.connection
 
     def query(self, sql):
         if self.sql:
-            print('SQL:', sql)
             with self.connect() as con:
                 with con.cursor() as cur:
                     cur.execute(sql)
@@ -93,7 +93,6 @@ class Pgsql:
 
     def queryCommit(self, sql):
         if self.sql:
-            print('SQL:', sql)
             with self.connect() as con:
                 with con.cursor() as cur:
                     cur.execute(sql)
@@ -109,6 +108,7 @@ class Pgsql:
                 self.values = cur.fetchall()
                 cur.close()
         con.close()
+        print(self.sql)
         return
 
     def fetchOne(self):
@@ -228,10 +228,8 @@ class Pgsql:
         return self.sql
 
     def sqlUpdate(self, values):
-        print('values:', values)
         sql_values = []
         for column_name in values:
-            print(column_name)
             if column_name != self.id_column:
                 value = values[column_name]
                 value = self.sqlValue(value)
@@ -241,7 +239,6 @@ class Pgsql:
         value = ', '.join(sql_values)
 
         self.sql = "UPDATE %s SET %s;\n" % (self.table_name, value)
-        print(self.sql)
         return self.sql
 
     def sqlDelete(self):
@@ -362,5 +359,4 @@ class Pgsql:
                 sql += "      ADD CONSTRAINT %s\n" % unique_key;
                 sql += "      UNIQUE (%s);\n" % unique_name;
 
-        print (sql)
         return sql
