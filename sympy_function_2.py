@@ -6,7 +6,7 @@ import sys
 
 var("a:z")
 
-result = solve(a*x**3 + b*x**2 + c*x + d, x)
+result = solve(a*x**2 + b*x + c, x)
 
 #init_printing()
 #display(result)

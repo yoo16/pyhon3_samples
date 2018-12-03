@@ -11,7 +11,10 @@ def convertFloat(value):
 
 def answer(a, b, c, d):
     x = Symbol('x')
-    return solve(a*x**3 + b*x**2 + c*x + d)
+    values = []
+    for value in solve(a*x**3 + b*x**2 + c*x + d):
+        values.append(convertFloat(value))
+    return values
 
 def plotX(max_x, min_x, step):
    return np.arange(min_x, max_x, step)
@@ -21,9 +24,6 @@ def plotY(x, a, b, c, d):
 
 a, b, c, d = map(float, input('Please input a, b, c, d.\n').split())
 min_x, max_x, step = map(float, input('Please input min x, max x, step number.\n').split())
-
-# a, b, c, d = 0.1, 0.1, -10, 1
-# min_x, max_x, step = -20, 20, 0.1
 
 if (min_x >= max_x):
     sys.exit('invalid min x max x!')
