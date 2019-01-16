@@ -33,7 +33,7 @@ def plotX(a, b, c):
 def plotY(a, b, c):
     return a*x**2 + b*x + c
 
-def pltScatterX(plt, a, b, c):
+def plotScatterX(plt, a, b, c):
     if (hasAnswer(a, b, c)):
         x = answer(a, b, c)
         plt.scatter([x[0]], [0], label = 'x1 = %s' % x[0])
@@ -47,7 +47,7 @@ x = plotX(a, b, c)
 y = plotY(a, b, c)
 plt.plot(x, y)
 
-pltScatterX(plt, a, b, c)
+plotScatterX(plt, a, b, c)
 
 plt.title('Function: %sx^2 + %sx + %s' % (a, b, c))
 
